@@ -1,0 +1,22 @@
+/** @format */
+
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+button {
+  width: 100px;
+  height: 100px;
+  border-radius: 100%;
+  background: cornflowerblue;
+  border: none;
+}
+button:active {
+  background: coral;
+}
