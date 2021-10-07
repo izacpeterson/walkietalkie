@@ -5,23 +5,31 @@
 var inTone = new Audio("./audio/inTone.mp3");
 var outTone = new Audio("./audio/outTone.mp3");
 
-function start() {
-  inTone.play();
-}
-
-function end() {
-  outTone.play();
-}
-
 var socket = io();
 
-socket.on("audioMessage", (audioData) => {
+socket.on("audioMessage", (msg, iT, oT) => {
   console.log("msg recieved");
-  const audiBlob = new Blob(audioData);
+  const audiBlob = new Blob(msg);
+  const iTBlob = new Blob(iT);
+  const oTBlob = new Blob(oT);
   const audioURL = URL.createObjectURL(audiBlob);
+  const itURL = URL.createObjectURL(iTBlob);
+  const otURL = URL.createObjectURL(oTBlob);
   const audio = new Audio(audioURL);
+  const iTaudio = new Audio(itURL);
+  const oTaudio = new Audio(otURL);
 
-  audio.play();
+  // console.log(audio.duration);
+  oTaudio.play();
+  oTaudio.onended = () => {
+    audio.play();
+    audio.onended = () => {
+      iTaudio.play();
+    };
+  };
+
+  // await iTaudio.play();
+  // await oTaudio.play();
 });
 
 navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {

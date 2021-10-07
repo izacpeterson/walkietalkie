@@ -10,8 +10,10 @@ const fs = require("fs");
 
 app.use(express.static("public"));
 
-let file = [];
-file.push(fs.readFileSync("inTone.mp3"));
+let inTone = [];
+inTone.push(fs.readFileSync("inTone.mp3"));
+let outTone = [];
+outTone.push(fs.readFileSync("outTone.mp3"));
 // file = fs.readFileSync("inTone.mp3");
 
 io.on("connection", (socket) => {
@@ -22,10 +24,11 @@ io.on("connection", (socket) => {
     // console.log(file);
     // console.log(msg);
     // newBuff.push(Buffer.concat([file, msg[0]]));
+    // io.emit("audioMessages", newBuff);
     // console.log(newBuff);
 
-    io.emit("audioMessage", msg);
-    io.emit("audioMessage", file);
+    io.emit("audioMessage", msg, inTone, outTone);
+
     console.log("message sent");
   });
 });
