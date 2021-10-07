@@ -1,5 +1,7 @@
 /** @format */
 
+// const internal = require("stream");
+
 var inTone = new Audio("./audio/inTone.mp3");
 var outTone = new Audio("./audio/outTone.mp3");
 
@@ -18,6 +20,7 @@ socket.on("audioMessage", (audioData) => {
   const audiBlob = new Blob(audioData);
   const audioURL = URL.createObjectURL(audiBlob);
   const audio = new Audio(audioURL);
+
   audio.play();
 });
 
@@ -41,8 +44,12 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
   }
   mediaRecorder.addEventListener("dataavailable", (ev) => {
     audioChunks.push(ev.data);
+    // audioChunks.push(inTone);
   });
   mediaRecorder.addEventListener("stop", () => {
+    let toneBlob = [];
+    toneBlob.push(new Blob([inTone], { type: "audio/mp3" }));
+    console.log(toneBlob);
     socket.emit("audioMessage", audioChunks);
     audioChunks = [];
   });
